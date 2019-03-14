@@ -16,11 +16,12 @@ public class TicketMachine {
     private List<TicketInterface> ticketData = new ArrayList<TicketInterface>();
     
     /**
-     * returns current ticket log used for generating ticket ids
+     * loads current ticket log used for generating ticket ids
+     * @param filePath file path for ticket data
      * @return int ticketLog for generating ticket ids
      */
     
-    public void loadTickets(String filePath)
+    private void loadTickets(String filePath)
     {
         try
         {
@@ -39,12 +40,19 @@ public class TicketMachine {
             System.out.println("File not found");
         }
     }
+    /**
+     * Constructor, calls method to load tickets
+     * @param filePath filepath for ticket data
+     */
     public TicketMachine(String filePath)
     {
         this.filePath = filePath;
         loadTickets(this.filePath);
     }
-    
+    /**
+     * 
+     * @return returns current ticket count
+     */
     public static int getTicketLog()
     {
         return ticketLog;
@@ -84,13 +92,20 @@ public class TicketMachine {
         t.setCheckOutTime(checkOutTime);        
         t.setIsPaid(true);
     }
+    /**
+     * adds a lost ticket to the ticket list
+     */
     public void addLostTicket()
     {
         int ticketID = ++this.ticketLog;
         TicketInterface ticket = new LostTicket(ticketID, false);
         ticketData.add(ticket);
     }
-   
+   /**
+    * Searches for ticket with a given ticket id
+    * @param searchID ticket id to search for
+    * @return returns a ticket if found, otherwise returns null
+    */
     public TicketInterface getTicket(int searchID)
     {
         TicketInterface ticket = null;
@@ -112,7 +127,10 @@ public class TicketMachine {
             return null;
         }
     }
-    
+    /**
+     * closes a lost ticket
+     * @param t tickte to close
+     */
     public void checkOutLostTicket(LostTicket t)
     {
         
@@ -163,6 +181,12 @@ public class TicketMachine {
         
         return fee;
     }
+    
+    /**
+     * calculates number of billable hours
+     * @param t ticket to calculate hours from
+     * @return returns number of billable hours
+     */
     public static int getBillableHours(StandardTicket t)
     {
         StandardTicket standard = (StandardTicket)t;
@@ -181,6 +205,10 @@ public class TicketMachine {
             return 0;
         }
     }
+    
+    /**
+     * processes closing the garage
+     */
    public void closeGarage()
    {
         double standardRevenue = 0;

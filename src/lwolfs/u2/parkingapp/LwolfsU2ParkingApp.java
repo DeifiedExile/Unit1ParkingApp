@@ -5,6 +5,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ *
+ * @author Exile
+ */
 public class LwolfsU2ParkingApp {
 
  
@@ -22,7 +26,7 @@ public class LwolfsU2ParkingApp {
     }
     
     /**
-     * Loads ticket data into memory
+     * 
      * Generates check in / check out machine selection for ease of testing
      * in practice, this would be removed and each machine would only call the
      * necessary methods.
@@ -81,7 +85,7 @@ public class LwolfsU2ParkingApp {
     }
     
     /**
-     * Handles the menu for creation of tickets and adds them to main ticket ArrayList
+     * Handles the menu for creation of tickets
      * @param machine TicketMachine object for processing tickets
      * 
      */
@@ -113,10 +117,6 @@ public class LwolfsU2ParkingApp {
                 machine.closeGarage();
                 break;
             default:
-//                for(Ticket x : tickets)
-//                {
-//                    System.out.printf("%s   %d  %s  %.2f\n", x.getCHECK_IN_TIME().toString(), x.getTICKET_ID(),x.getStatus(), x.getPaidAmount());
-//                }
                 break;
         }
         
@@ -160,6 +160,7 @@ public class LwolfsU2ParkingApp {
     }
     /**
      * Handles the check out process for a lost ticket
+     * @param machine
      */
     public void closeNoTicket(TicketMachine machine)
     {
@@ -171,45 +172,7 @@ public class LwolfsU2ParkingApp {
 
         ReceiptPrinter.printReceipt(lost);
     }
-    /**
-     * Outputs a receipt for a closed ticket
-     * @param t Ticket requiring a receipt
-     */
-//    public void ticketReceipt(TicketInterface t, TicketMachine machine)
-//    {
-//        System.out.println("Best Value Parking Garage");
-//        System.out.println("=========================\n");
-//        
-//        if(t.getTicketType().equalsIgnoreCase(TicketType.STANDARD.toString()))
-//        {
-//            StandardTicket ticket = (StandardTicket)t;
-//            System.out.printf("Receipt for vehicle ID %d\n\n", t.getTICKET_ID());
-//            System.out.printf("%d hours parked %s - %s\n\n", billedHours, t.getCHECK_IN_TIME().toString(), t.getCheckOutTime().toString());
-//            System.out.printf("$%.2f", t.getPaidAmount());
-//        }
-//        else
-//        {
-//            System.out.println("Receipt for lost ticket\n");
-//            System.out.printf("$%.2f", t.getPaidAmount());
-//        }
-//        
-//    }
-    /**
-     * Searches the tickets ArrayList based on ticketID
-     * @param id ticket id to search for
-     * @return Ticket found if any
-     */
-//    public StandardTicket findTicket(int id)
-//    {
-//        for(StandardTicket t : tickets)
-//        {
-//            if(t.getTICKET_ID() == id)
-//            {
-//                return t;
-//            }
-//        }
-//        return null;
-//    }
+    
     /**
      * Closes a ticket
      * @param machine TicketMachine for processing tickets
@@ -252,37 +215,7 @@ public class LwolfsU2ParkingApp {
         
     }
 
-    /**
-     * Outputs financial results to date
-     * calls method to save ticket data to file
-     */
-//    public void closeGarage()
-//    {        
-//        double standardRevenue = 0;
-//        double lostRevenue = 0;
-//        int standardCount = 0;
-//        int lostCount = 0;
-//        
-//        for(TicketInterface ticket : tickets)
-//        {
-//            if(ticket.getTicketType().equalsIgnoreCase(TicketType.STANDARD.toString()) && ticket.IsPaid())
-//            {
-//                StandardTicket standard = (StandardTicket)ticket;
-//                standardRevenue += TicketMachine.getFee(standard);
-//                standardCount++;
-//
-//            }
-//            else
-//            {
-//                lostRevenue += TicketMachine.getFee(ticket);
-//                lostCount++;
-//            }
-//        }
-//        ReceiptPrinter.printClosingTotals(standardRevenue, lostRevenue, standardCount, lostCount);
-//        
-//        FileOutput fo = new FileOutput(ticketFileName);
-//        fo.saveToFile(tickets);
-//    }
+    
     /**
      * Outputs check in menu
      */

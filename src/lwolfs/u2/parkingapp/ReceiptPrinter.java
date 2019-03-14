@@ -9,7 +9,10 @@ package lwolfs.u2.parkingapp;
 
 public class ReceiptPrinter {
 
-    
+    /**
+     * prints a receipt for closing a ticket
+     * @param t ticket to generate a receipt for
+     */
     public static void printReceipt(TicketInterface t)
     {
         if(t.getTicketType().equalsIgnoreCase(TicketType.STANDARD.toString()))
@@ -45,6 +48,13 @@ public class ReceiptPrinter {
             System.out.println(TicketInterface.LOST_TICKET_FEE);
         }
     }
+    /**
+     * prints the final totals after closing the garage
+     * @param standardRevenue total revenue from standard tickets closed
+     * @param lostRevenue total revenue from lost tickets
+     * @param standardCount total number of standard tickets
+     * @param lostCount total number of lost tickets
+     */
     public static void printClosingTotals(double standardRevenue, double lostRevenue, int standardCount, int lostCount)
     {
         System.out.println("Best Value Parking Garage");
