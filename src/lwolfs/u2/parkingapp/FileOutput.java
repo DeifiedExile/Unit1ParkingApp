@@ -38,11 +38,11 @@ public class FileOutput {
      * Processes saving ticket data to file
      * @param tickets List of ticket data to save
      */
-    public void saveToFile(List<Ticket> tickets)
+    public void saveToFile(List<TicketInterface> tickets)
     {
         try
         {
-            for(Ticket t : tickets)
+            for(TicketInterface t : tickets)
             {
                 oos.writeObject(t);
             }

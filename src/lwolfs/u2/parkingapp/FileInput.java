@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileInput {
@@ -21,11 +22,10 @@ public class FileInput {
      * @return Arraylist of Ticket data
      * @throws IOException 
      */
-    public static ArrayList<Ticket> loadTickets(String fileName) throws IOException
+    public static List<TicketInterface> loadTickets(String fileName) throws IOException
     {
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-        
-        
+        List<TicketInterface> tickets = new ArrayList<TicketInterface>();
+
         try {
             fis = new FileInputStream(fileName);
             ois = new ObjectInputStream(fis);
@@ -38,7 +38,7 @@ public class FileInput {
             try
             {
                 Object obj = ois.readObject();
-                Ticket ticket = (Ticket)obj;
+                TicketInterface ticket = (TicketInterface)obj;
                 tickets.add(ticket);
             }
             catch(Exception eof)

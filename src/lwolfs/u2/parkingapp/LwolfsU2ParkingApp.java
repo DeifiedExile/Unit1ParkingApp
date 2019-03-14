@@ -8,10 +8,10 @@ import java.util.Scanner;
 public class LwolfsU2ParkingApp {
 
  
-    private ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
     private Scanner input = new Scanner(System.in);
     private String ticketFileName = "tickets.dat";
-
+    
    /**
      * Initializes program
      * @param args the command line arguments
@@ -30,27 +30,7 @@ public class LwolfsU2ParkingApp {
      */
     public LwolfsU2ParkingApp()
     {
-        TicketMachine machine = new TicketMachine();
-        
-        //loads tickets into memory
-        try
-        {
-            for(Ticket t : FileInput.loadTickets(ticketFileName))
-            {
-                tickets.add(t);
-                if(t.getTICKET_ID()>machine.getTicketLog())
-                {
-                    machine.setTicketLog(t.getTICKET_ID());
-                }
-            }
-            
-        }
-        catch(Exception e)
-        {
-            System.out.println("File not found");
-        }
-        
-        
+       TicketMachine machine = new TicketMachine(ticketFileName);
         
         int menu = 0;
         while(menu != 3)
@@ -58,6 +38,7 @@ public class LwolfsU2ParkingApp {
             printMainMenu();
             
             String s = input.nextLine();
+            System.out.println("\n");
             int choice = 3;
             try
             {
@@ -96,7 +77,7 @@ public class LwolfsU2ParkingApp {
         System.out.println("Select Machine");
         System.out.println("1.) Check/In");
         System.out.println("2.) Check/Out");
-        System.out.println("3.) Exit");
+      //  System.out.println("3.) Exit");
     }
     
     /**
@@ -109,6 +90,7 @@ public class LwolfsU2ParkingApp {
         printCheckInMenu();
 
         String s = input.nextLine();
+        System.out.println("\n");
         int choice = 3;
         try
         {
@@ -122,13 +104,13 @@ public class LwolfsU2ParkingApp {
         switch(choice)
         {
             case 1:
-                Ticket t = machine.checkIn();
-                tickets.add(t);
-                System.out.printf("Ticket ID: %d\nCheck-In Time: %s\n", t.getTICKET_ID(), t.getCHECK_IN_TIME().toString());
+                machine.checkIn();
+                StandardTicket t = (StandardTicket)machine.getTicket(machine.getTicketLog());
+                System.out.printf("Ticket ID: %d\nCheck-In Time: %s\n\n", t.getTICKET_ID(), t.getCHECK_IN_TIME().toString());
                 
                 break;
             case 2:
-                closeGarage();
+                machine.closeGarage();
                 break;
             default:
 //                for(Ticket x : tickets)
@@ -151,6 +133,7 @@ public class LwolfsU2ParkingApp {
         printCheckOutMenu();
 
         String s = input.nextLine();
+        System.out.println("\n");
         int choice = 3;
         try
         {
@@ -167,7 +150,7 @@ public class LwolfsU2ParkingApp {
                 closeTicket(machine);
                 break;
             case 2:
-                closeNoTicket();
+                closeNoTicket(machine);
                 break;
             default:
                 break;
@@ -178,87 +161,92 @@ public class LwolfsU2ParkingApp {
     /**
      * Handles the check out process for a lost ticket
      */
-    public void closeNoTicket()
+    public void closeNoTicket(TicketMachine machine)
     {
         System.out.println("Lost tickets are subject to a $25 fee.");
-        Ticket noTicket = new Ticket(0, null, null, true, 25);
-        tickets.add(noTicket);
-        ticketReceipt(noTicket);
+        
+        machine.addLostTicket();
+        LostTicket lost = (LostTicket)machine.getTicket(machine.getTicketLog());
+        machine.checkOutLostTicket(lost);
+
+        ReceiptPrinter.printReceipt(lost);
     }
     /**
      * Outputs a receipt for a closed ticket
      * @param t Ticket requiring a receipt
      */
-    public void ticketReceipt(Ticket t)
-    {
-        System.out.println("Best Value Parking Garage");
-        System.out.println("=========================\n");
-        
-        if(t.getTICKET_ID() != 0)
-        {
-            int billedHours = (int)Duration.between(t.getCHECK_IN_TIME(), t.getCheckOutTime()).toHours();
-            if(Duration.between(t.getCHECK_IN_TIME(), t.getCheckOutTime()).minusHours(billedHours).getSeconds()/60 > 0)
-            {
-                billedHours++;
-            }           
-            System.out.printf("Receipt for vehicle ID %d\n\n", t.getTICKET_ID());
-            System.out.printf("%d hours parked %s - %s\n\n", billedHours, t.getCHECK_IN_TIME().toString(), t.getCheckOutTime().toString());
-            System.out.printf("$%.2f", t.getPaidAmount());
-        }
-        else
-        {
-            System.out.println("Receipt for lost ticket\n");
-            System.out.printf("$%.2f", t.getPaidAmount());
-        }
-        
-    }
+//    public void ticketReceipt(TicketInterface t, TicketMachine machine)
+//    {
+//        System.out.println("Best Value Parking Garage");
+//        System.out.println("=========================\n");
+//        
+//        if(t.getTicketType().equalsIgnoreCase(TicketType.STANDARD.toString()))
+//        {
+//            StandardTicket ticket = (StandardTicket)t;
+//            System.out.printf("Receipt for vehicle ID %d\n\n", t.getTICKET_ID());
+//            System.out.printf("%d hours parked %s - %s\n\n", billedHours, t.getCHECK_IN_TIME().toString(), t.getCheckOutTime().toString());
+//            System.out.printf("$%.2f", t.getPaidAmount());
+//        }
+//        else
+//        {
+//            System.out.println("Receipt for lost ticket\n");
+//            System.out.printf("$%.2f", t.getPaidAmount());
+//        }
+//        
+//    }
     /**
      * Searches the tickets ArrayList based on ticketID
      * @param id ticket id to search for
      * @return Ticket found if any
      */
-    public Ticket findTicket(int id)
-    {
-        for(Ticket t : tickets)
-        {
-            if(t.getTICKET_ID() == id)
-            {
-                return t;
-            }
-        }
-        return null;
-    }
+//    public StandardTicket findTicket(int id)
+//    {
+//        for(StandardTicket t : tickets)
+//        {
+//            if(t.getTICKET_ID() == id)
+//            {
+//                return t;
+//            }
+//        }
+//        return null;
+//    }
     /**
      * Closes a ticket
      * @param machine TicketMachine for processing tickets
      */
     public void closeTicket(TicketMachine machine)
     {
-        System.out.println("Input ticket ID");
-        String inputID = input.nextLine();
+        TicketInterface ticket = null;
         int ticketID;
-        try
+        do
         {
-            ticketID = Integer.parseInt(inputID);
+            System.out.println("Input ticket ID");
+            
+            String inputID = input.nextLine();
+            
+            try
+            {
+                ticketID = Integer.parseInt(inputID);
 
-        }
-        catch(Exception e)
-        {
-            ticketID = 0;
-        }
-        Ticket t = findTicket(ticketID);
-        if(t == null || ticketID == 0)
+            }
+            catch(Exception e)
+            {
+                ticketID = 0;
+            }
+        }while(ticketID == 0);
+        
+        ticket = machine.getTicket(ticketID);
+        if(ticket == null || ticket.getTicketType().equalsIgnoreCase(TicketType.LOST.toString())||ticket.IsPaid())
         {
             System.out.println("Invalid Ticket ID. Defaulting to Lost Ticket");
-            closeNoTicket();
+            closeNoTicket(machine);
             
         }
         else
         {
             //sets ticket status to closed and records fee
-            machine.checkOut(t);
-            System.out.println("Payment Complete");
-            System.out.printf("TicketID: %d\nFee paid: %.2f", t.getTICKET_ID(), t.getPaidAmount());
+            machine.checkOutStandard((StandardTicket)ticket);
+            ReceiptPrinter.printReceipt(ticket);
             
         }
         
@@ -268,40 +256,33 @@ public class LwolfsU2ParkingApp {
      * Outputs financial results to date
      * calls method to save ticket data to file
      */
-    public void closeGarage()
-    {        
-        double standardRevenue = 0;
-        double lostRevenue = 0;
-        int checkInCount = 0;
-        int lostCount = 0;
-        
-        for(Ticket t : tickets)
-        {
-            if(t.getTICKET_ID() != 0)
-            {
-                if(t.getStatus())
-                {
-                    standardRevenue += t.getPaidAmount();
-                    checkInCount++;
-                    
-                }
-            }
-            else
-            {
-                lostRevenue += t.getPaidAmount();
-                lostCount++;
-            }
-        }
-        
-        System.out.println("Best Value Parking Garage");
-        System.out.println("=========================\n");
-        System.out.println("Activity to Date\n\n");
-        System.out.printf("%.2f was collected from %d Check Ins\n", standardRevenue, checkInCount );
-        System.out.printf("%.2f was collected from %d Lost Tickets\n\n", lostRevenue, lostCount);
-        System.out.printf("%.2f was collected overall\n", (standardRevenue + lostRevenue));
-        FileOutput fo = new FileOutput(ticketFileName);
-        fo.saveToFile(tickets);
-    }
+//    public void closeGarage()
+//    {        
+//        double standardRevenue = 0;
+//        double lostRevenue = 0;
+//        int standardCount = 0;
+//        int lostCount = 0;
+//        
+//        for(TicketInterface ticket : tickets)
+//        {
+//            if(ticket.getTicketType().equalsIgnoreCase(TicketType.STANDARD.toString()) && ticket.IsPaid())
+//            {
+//                StandardTicket standard = (StandardTicket)ticket;
+//                standardRevenue += TicketMachine.getFee(standard);
+//                standardCount++;
+//
+//            }
+//            else
+//            {
+//                lostRevenue += TicketMachine.getFee(ticket);
+//                lostCount++;
+//            }
+//        }
+//        ReceiptPrinter.printClosingTotals(standardRevenue, lostRevenue, standardCount, lostCount);
+//        
+//        FileOutput fo = new FileOutput(ticketFileName);
+//        fo.saveToFile(tickets);
+//    }
     /**
      * Outputs check in menu
      */
