@@ -12,7 +12,10 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ *
+ * @author Exile
+ */
 public class FileInput {
     private static FileInputStream fis = null;
     private static ObjectInputStream ois = null;

@@ -10,6 +10,14 @@ package lwolfs.u2.parkingapp;
  * @author Exile
  */
 public enum TicketType {
+
+    /**
+     *
+     */
     STANDARD,
+
+    /**
+     *
+     */
     LOST
 }

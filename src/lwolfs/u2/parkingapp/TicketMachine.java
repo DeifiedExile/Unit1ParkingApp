@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ *
+ * @author Exile
+ */
 public class TicketMachine {
     
     private static int ticketLog = 0;
@@ -68,7 +71,6 @@ public class TicketMachine {
     /**
      * creates a ticket with ticket id and check in time
      * increments ticketLog
-     * @return Ticket that was created
      */
     public void checkIn()
     {

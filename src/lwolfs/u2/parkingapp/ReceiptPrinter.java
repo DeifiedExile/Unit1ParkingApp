@@ -6,7 +6,10 @@
 
 package lwolfs.u2.parkingapp;
 
-
+/**
+ *
+ * @author Exile
+ */
 public class ReceiptPrinter {
 
     /**

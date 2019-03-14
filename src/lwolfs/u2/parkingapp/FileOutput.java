@@ -9,6 +9,10 @@ package lwolfs.u2.parkingapp;
 import java.io.*;
 import java.util.List;
 
+/**
+ *
+ * @author Exile
+ */
 public class FileOutput {
     
     String fileName;
